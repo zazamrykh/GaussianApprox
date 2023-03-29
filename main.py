@@ -1,12 +1,10 @@
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from F1ApproxClass import F1ApproxClass
 from F2ApproxClass import F2ApproxClass
 from F3ApproxClass import F3ApproxClass
-
 
 columns = ["z_" + str(i) for i in range(23)]
 df = pd.read_csv("VseZondy.txt", sep="\t", names=columns, header=None)
@@ -29,8 +27,8 @@ intensity_table = pd.DataFrame({'x': x_array, 'y': y_array, 'z': z_array})
 
 # Построение аппроксимации F1 функцией
 print("F1 approximation")
-f1_approx = F1ApproxClass(number_of_repeat=1000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
-                          start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
+f1_approx = F1ApproxClass(number_of_repeat=10000, start_est=np.array([z_array[11], 100, 0., 0.]),
+                          start_alpha=np.array([0.17, 10000, 0.2, 0.2]))
 f1_approx.gradientDescent(x_array, y_array, z_array)
 print("Gotten parameters:")
 print(f1_approx.params)
@@ -41,7 +39,7 @@ print()
 
 # Построение аппроксимирующей поверхности F2
 print("F2 approximation")
-f2_approx = F2ApproxClass(number_of_repeat=1000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+f2_approx = F2ApproxClass(number_of_repeat=10000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
                           start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
 f2_approx.gradientDescent(x_array, y_array, z_array)
 print("Gotten parameters:")
@@ -53,7 +51,7 @@ print()
 
 # Построение аппроксимирующей поверхности F3
 print("F3 approximation")
-f3_approx = F3ApproxClass(number_of_repeat=1000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+f3_approx = F3ApproxClass(number_of_repeat=10000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
                           start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
 f3_approx.gradientDescent(x_array, y_array, z_array)
 print("Gotten parameters:")

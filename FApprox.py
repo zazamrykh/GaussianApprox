@@ -40,8 +40,7 @@ class FApprox:
             est -= alpha * grad
             grad_before_last = grad_before
             grad_before = grad
-        self.min_mse = self.findMSE(X, Y, Z, *est)
-        print(self.min_mse)
+        self.min_mse = self.findMSE(X, Y, Z, est)
         self.params = est
 
     def gridSearch(self, bottom_left_corner, top_right_corner, number_of_slice, number_of_repeat, cease_rate, X, Y, Z):
@@ -57,8 +56,8 @@ class FApprox:
                 for current_sigma_y in arange(bottom_left_corner[2], top_right_corner[2], step_sigma_y):
                     for current_x0 in arange(bottom_left_corner[3], top_right_corner[3], step_x0):
                         for current_y0 in arange(bottom_left_corner[4], top_right_corner[4], step_y0):
-                            current_mse = self.findMSE(X, Y, Z, current_a, current_sigma_x,
-                                                       current_sigma_y, current_x0, current_y0)
+                            current_mse = self.findMSE(X, Y, Z, np.array(current_a, current_sigma_x, current_sigma_y,
+                                                                         current_x0, current_y0))
                             if current_mse < best_mse:
                                 best_mse = current_mse
                                 best_array[0] = current_a
@@ -109,9 +108,9 @@ class FApprox:
         plt.ylim(-100, 100)
         plt.show()
 
-    def findMSE(self, X, Y, Z, A, sigma_x, sigma_y, x0, y0):
+    def findMSE(self, X, Y, Z, params):
         squad_error = 0
         N = Z.shape[0]
         for i in range(N):
-            squad_error += (Z[i] - self.F(A, sigma_x, sigma_y, x0, y0, X[i], Y[i])) ** 2
+            squad_error += (Z[i] - self.F(*params, X[i], Y[i])) ** 2
         return squad_error / N

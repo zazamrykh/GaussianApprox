@@ -33,7 +33,7 @@ class F3ApproxClass(FApprox):
 def derLA(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
     result = 0
     for x, y, z in zip(X, Y, Z):
-        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3_A(x, y, x0, y0, sigma_x, sigma_y)
+        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3A(x, y, x0, y0, sigma_x, sigma_y)
     result *= 2
     return result
 
@@ -41,7 +41,7 @@ def derLA(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
 def derLX0(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
     result = 0
     for x, y, z in zip(X, Y, Z):
-        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3_X0(x, y, x0, y0, A, sigma_x, sigma_y)
+        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3X0(x, y, x0, y0, A, sigma_x, sigma_y)
     result *= 2
     return result
 
@@ -49,7 +49,7 @@ def derLX0(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
 def derLY0(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
     result = 0
     for x, y, z in zip(X, Y, Z):
-        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3_Y0(x, y, x0, y0, A, sigma_x, sigma_y)
+        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3Y0(x, y, x0, y0, A, sigma_x, sigma_y)
     result *= 2
     return result
 
@@ -57,7 +57,7 @@ def derLY0(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
 def derLSigmaX(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
     result = 0
     for x, y, z in zip(X, Y, Z):
-        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3_SigmaX(x, y, x0, y0, A, sigma_x, sigma_y)
+        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3SigmaX(x, y, x0, y0, A, sigma_x, sigma_y)
     result *= 2
     return result
 
@@ -65,23 +65,23 @@ def derLSigmaX(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
 def derLSigmaY(X, Y, Z, x0, y0, A, sigma_x, sigma_y):
     result = 0
     for x, y, z in zip(X, Y, Z):
-        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3_SigmaY(x, y, x0, y0, A, sigma_x, sigma_y)
+        result += (F3(A, sigma_x, sigma_y, x0, y0, x, y) - z) * derF3SigmaY(x, y, x0, y0, A, sigma_x, sigma_y)
     result *= 2
     return result
 
 
-def derF3_X0(x, y, x0, y0, A, sigma_x, sigma_y):
+def derF3X0(x, y, x0, y0, A, sigma_x, sigma_y):
     return A * doubleGaussExp(x, x0, y, y0, sigma_x, sigma_y) * (x - x0) / sigma_x
 
 
-def derF3_A(x, y, x0, y0, sigma_x, sigma_y):
+def derF3A(x, y, x0, y0, sigma_x, sigma_y):
     return (
             doubleGaussExp(x, x0, y, y0, sigma_x, sigma_y) +
             gaussExp(y, y0, sigma_y / 2) * ((y - y0) ** 2 / (2 * sigma_y))
     )
 
 
-def derF3_Y0(x, y, x0, y0, A, sigma_x, sigma_y):
+def derF3Y0(x, y, x0, y0, A, sigma_x, sigma_y):
     return (
             A * doubleGaussExp(x, x0, y, y0, sigma_x, sigma_y) * (y - y0) / sigma_y +
             (A / sigma_y) * (y - y0) * gaussExp(y, y0, sigma_y / 2) *
@@ -89,13 +89,13 @@ def derF3_Y0(x, y, x0, y0, A, sigma_x, sigma_y):
     )
 
 
-def derF3_SigmaY(x, y, x0, y0, A, sigma_x, sigma_y):
+def derF3SigmaY(x, y, x0, y0, A, sigma_x, sigma_y):
     return (A * doubleGaussExp(x, x0, y, y0, sigma_x, sigma_y) * ((y - y0) ** 2 * 2 / ((2 * sigma_y) ** 2)) + (
             A / 2) * (y - y0) ** 2 *
             gaussExp(y, y0, sigma_y / 2) * ((y - y0) ** 2 * (sigma_x ** (-3)) - (sigma_y ** (-2))))
 
 
-def derF3_SigmaX(x, y, x0, y0, A, sigma_x, sigma_y):
+def derF3SigmaX(x, y, x0, y0, A, sigma_x, sigma_y):
     return (
             A * doubleGaussExp(x, x0, y, y0, sigma_x, sigma_y) * ((x - x0) ** 2 * 2 / ((2 * sigma_x) ** 2))
     )
