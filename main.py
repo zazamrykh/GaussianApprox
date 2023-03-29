@@ -3,12 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from F1Approx import *
-from F2Approx import *
-from F3Approx import gridSearch, F3
+from F1ApproxClass import F1ApproxClass
 from F2ApproxClass import F2ApproxClass
-from F3ApproxSympy import gradientDescentF3
-from FApprox import buildPlot
+from F3ApproxClass import F3ApproxClass
+
 
 columns = ["z_" + str(i) for i in range(23)]
 df = pd.read_csv("VseZondy.txt", sep="\t", names=columns, header=None)
@@ -29,25 +27,47 @@ N = x_array.shape[0]
 mpl.use('TkAgg')
 intensity_table = pd.DataFrame({'x': x_array, 'y': y_array, 'z': z_array})
 
-
 # Построение аппроксимации F1 функцией
-params = gradientDescentF1(x_array, y_array, z_array)
-buildPlot(F1, params, x_array, y_array, z_array)
-
+print("F1 approximation")
+f1_approx = F1ApproxClass(number_of_repeat=1000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+                          start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
+f1_approx.gradientDescent(x_array, y_array, z_array)
+print("Gotten parameters:")
+print(f1_approx.params)
+print("F1 MSE:")
+print(f1_approx.min_mse)
+f1_approx.buildPlot(x_array, y_array, z_array)
+print()
 
 # Построение аппроксимирующей поверхности F2
-f2_approx = F2ApproxClass()
-params = f2_approx.approx(x_array, y_array, z_array)
-print(params)
-buildPlot(F2, params, x_array, y_array, z_array)
+print("F2 approximation")
+f2_approx = F2ApproxClass(number_of_repeat=1000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+                          start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
+f2_approx.gradientDescent(x_array, y_array, z_array)
+print("Gotten parameters:")
+print(f2_approx.params)
+print("F2 MSE:")
+print(f2_approx.min_mse)
+f2_approx.buildPlot(x_array, y_array, z_array)
+print()
 
+# Построение аппроксимирующей поверхности F3
+print("F3 approximation")
+f3_approx = F3ApproxClass(number_of_repeat=1000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+                          start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
+f3_approx.gradientDescent(x_array, y_array, z_array)
+print("Gotten parameters:")
+print(f3_approx.params)
+print("F3 MSE:")
+print(f3_approx.min_mse)
+f3_approx.buildPlot(x_array, y_array, z_array)
 
-# Построение поверхности произвольной функции с помощью перебора по сетке
-bottom_left_corner = np.array([0.3, 1500, 1500, -0.25, -0.25], dtype=np.float64)
-top_right_corner = np.array([0.7, 2500, 2500, 0.25, 0.25], dtype=np.float64)
-number_of_slice = 4
-number_of_repeat = 50
-cease_rate = 0.94
-params = gridSearch(bottom_left_corner, top_right_corner, number_of_slice,
-                    number_of_repeat, cease_rate, x_array, y_array, z_array)
-buildPlot(F3, params, x_array, y_array, z_array)
+# You can make approx such way for every function you want
+# bottom_left_corner = np.array([0.3, 1500, 1500, -0.25, -0.25], dtype=np.float64)
+# top_right_corner = np.array([0.7, 2500, 2500, 0.25, 0.25], dtype=np.float64)
+# number_of_slice = 4
+# number_of_repeat = 50
+# cease_rate = 0.94
+# f2_approx.gridSearch(bottom_left_corner, top_right_corner, number_of_slice,
+#                      number_of_repeat, cease_rate, x_array, y_array, z_array)
+# f2_approx.buildPlot(x_array,y_array,z_array)
