@@ -26,8 +26,8 @@ def gradL(X, Y, Z, A, sigma_x, sigma_y, x0, y0):
 
 
 class F3ApproxClass(FApprox):
-    def __init__(self, number_of_repeat, start_est, start_alpha):
-        super().__init__(number_of_repeat, start_est, start_alpha, F3, gradL)
+    def __init__(self, number_of_repeat, start_est, start_alpha, step_change_coef=0.9):
+        super().__init__(number_of_repeat, start_est, start_alpha, F3, gradL, step_change_coef)
 
 
 def derLA(X, Y, Z, x0, y0, A, sigma_x, sigma_y):

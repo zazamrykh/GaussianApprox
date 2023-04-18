@@ -6,17 +6,8 @@ from numpy import arange
 from numpy import linalg as LA
 
 
-def stepChange(alpha, grad, grad_before, grad_before_last):
-    was_change = False
-    for i in range(grad.shape[0]):
-        if grad[i] > grad_before[i] and grad_before[i] < grad_before_last[i]:
-            alpha[i] = alpha[i] * 0.5
-            was_change = True
-    return was_change
-
-
 class FApprox:
-    def __init__(self, number_of_repeat, start_est, start_alpha, F, gradL):
+    def __init__(self, number_of_repeat, start_est, start_alpha, F, gradL, step_change_coef=0.75):
         self.start_est = start_est
         self.number_of_repeat = number_of_repeat
         self.start_alpha = start_alpha
@@ -24,9 +15,7 @@ class FApprox:
         self.F = F
         self.params = None
         self.min_mse = None
-
-    # alpha = np.array([0.17, 10000, 10000, 0.2, 0.2])
-    # est = np.array([Z[11], 100, 100, 0., 0.])  # Start estimation
+        self.step_change_coef = step_change_coef
 
     def gradientDescent(self, X, Y, Z):
         alpha = self.start_alpha
@@ -35,9 +24,8 @@ class FApprox:
         grad_before = est
         for i in range(self.number_of_repeat):
             grad = self.gradL(X, Y, Z, *est)
-            if stepChange(alpha, grad, grad_before, grad_before_last):
-                grad = self.gradL(X, Y, Z, *est)
-            est -= alpha * grad
+            self.stepChange(alpha, grad, grad_before, grad_before_last)
+            est -= alpha * grad / LA.norm(grad)
             grad_before_last = grad_before
             grad_before = grad
         self.min_mse = self.findMSE(X, Y, Z, est)
@@ -65,10 +53,6 @@ class FApprox:
                                 best_array[2] = current_sigma_y
                                 best_array[3] = current_x0
                                 best_array[4] = current_y0
-        print(number_of_repeat)
-        print(best_array)
-        print(best_mse)
-        print(LA.norm(top_right_corner - bottom_left_corner))
         if number_of_repeat > 1:
             number_of_repeat -= 1
             bottom_left_corner = np.array([best_array[0] - step_a * number_of_slice / 2 * cease_rate,
@@ -114,3 +98,11 @@ class FApprox:
         for i in range(N):
             squad_error += (Z[i] - self.F(*params, X[i], Y[i])) ** 2
         return squad_error / N
+
+    def stepChange(self, alpha, grad, grad_before, grad_before_last):
+        was_change = False
+        for i in range(grad.shape[0]):
+            if grad[i] > grad_before[i] and grad_before[i] < grad_before_last[i]:
+                alpha[i] = alpha[i] * self.step_change_coef
+                was_change = True
+        return was_change

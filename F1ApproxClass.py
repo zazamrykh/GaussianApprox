@@ -5,8 +5,8 @@ from FApprox import FApprox
 
 
 class F1ApproxClass(FApprox):
-    def __init__(self, number_of_repeat, start_est, start_alpha):
-        super().__init__(number_of_repeat, start_est, start_alpha, F1, gradL)
+    def __init__(self, number_of_repeat, start_est, start_alpha, step_change_coef=0.8):
+        super().__init__(number_of_repeat, start_est, start_alpha, F1, gradL, step_change_coef)
 
 
 def gradL(X, Y, Z, A, sigma, x0, y0):

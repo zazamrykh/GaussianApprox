@@ -9,8 +9,8 @@ def F2(A, sigma_x, sigma_y, x0, y0, x, y):
 
 
 class F2ApproxClass(FApprox):
-    def __init__(self, number_of_repeat, start_est, start_alpha):
-        super().__init__(number_of_repeat, start_est, start_alpha, F2, gradL)
+    def __init__(self, number_of_repeat, start_est, start_alpha, step_change_coef=0.8):
+        super().__init__(number_of_repeat, start_est, start_alpha, F2, gradL, step_change_coef)
 
 
 def gradL(X, Y, Z, A, sigma_x, sigma_y, x0, y0):

@@ -27,8 +27,8 @@ intensity_table = pd.DataFrame({'x': x_array, 'y': y_array, 'z': z_array})
 
 # Построение аппроксимации F1 функцией
 print("F1 approximation")
-f1_approx = F1ApproxClass(number_of_repeat=10000, start_est=np.array([z_array[11], 100, 0., 0.]),
-                          start_alpha=np.array([0.17, 10000, 0.2, 0.2]))
+f1_approx = F1ApproxClass(number_of_repeat=5000, start_est=np.array([z_array[11], 400, 0., 0.]),
+                          start_alpha=np.array([0.1, 5000, 0.1, 0.1]))
 f1_approx.gradientDescent(x_array, y_array, z_array)
 print("Gotten parameters:")
 print(f1_approx.params)
@@ -39,8 +39,8 @@ print()
 
 # Построение аппроксимирующей поверхности F2
 print("F2 approximation")
-f2_approx = F2ApproxClass(number_of_repeat=10000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
-                          start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
+f2_approx = F2ApproxClass(number_of_repeat=5000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+                          start_alpha=np.array([0.17, 4000, 4000, 0.2, 0.2]))
 f2_approx.gradientDescent(x_array, y_array, z_array)
 print("Gotten parameters:")
 print(f2_approx.params)
@@ -51,8 +51,8 @@ print()
 
 # Построение аппроксимирующей поверхности F3
 print("F3 approximation")
-f3_approx = F3ApproxClass(number_of_repeat=10000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
-                          start_alpha=np.array([0.17, 10000, 10000, 0.2, 0.2]))
+f3_approx = F3ApproxClass(number_of_repeat=5000, start_est=np.array([z_array[11], 100, 100, 0., 0.]),
+                          start_alpha=np.array([0.17, 5000, 2500, 0.2, 0.2]), step_change_coef=0.8)
 f3_approx.gradientDescent(x_array, y_array, z_array)
 print("Gotten parameters:")
 print(f3_approx.params)
