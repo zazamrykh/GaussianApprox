@@ -59,6 +59,7 @@ for i in range(number_of_zonds):
     f3_sum_MSE += f3_approx.min_mse
     print()
 
+    # Построение графиков для i = 8 файла
     if i == 8:
         f1_approx.buildPlot(x_array, y_array, z_array)
         f2_approx.buildPlot(x_array, y_array, z_array)
